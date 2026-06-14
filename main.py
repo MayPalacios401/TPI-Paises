@@ -49,11 +49,11 @@ def pedir_entero_positivo(mensaje):
         try:
             numero = int(input(mensaje).strip())
             if numero <= 0:
-                print("\nEl número debe ser mayor que cero.")
+                print("El número debe ser mayor que cero.")
             else:
                 return numero
         except ValueError:
-            print("\nDebe ingresar un número entero válido.")
+            print("Debe ingresar un número entero válido.")
 
 #--MÓDULO DE DATOS--#
 
@@ -75,7 +75,7 @@ def leer_csv():
                     continue  # Saltar la fila de encabezado
 
                 if len(linea) != 4:
-                    print(f"\nError de formato en la línea {numero_linea}. Se omite ese registro.")
+                    print(f"Error de formato en la línea {numero_linea}. Se omite ese registro.")
                     continue
 
                 try:
@@ -90,17 +90,17 @@ def leer_csv():
                     }
 
                     if pais['nombre'] == "" or pais['continente'] == "":
-                        print(f"\nCampos vacíos en la línea {numero_linea}. Se omite ese registro.")
+                        print(f"Campos vacíos en la línea {numero_linea}. Se omite ese registro.")
                         continue
 
                     if pais['poblacion'] <= 0 or pais['superficie'] <= 0:
-                        print(f"\nValores numéricos inválidos en la línea {numero_linea}. Se omite ese registro.")
+                        print(f"Valores numéricos inválidos en la línea {numero_linea}. Se omite ese registro.")
                         continue
 
                     paises.append(pais)
 
                 except ValueError:
-                    print(f"\nError de tipo de dato en la línea {numero_linea}. Se omite ese registro.")
+                    print(f"Error de tipo de dato en la línea {numero_linea}. Se omite ese registro.")
 
     except FileNotFoundError:
         print("\nNo se encontró el archivo paises.csv. Se iniciará con una lista vacía.")
@@ -112,9 +112,9 @@ def leer_csv():
 # información incompleta o duplicada.
 def agregar_pais(paises):
     while True:
-        nombre = input("\nIngrese el nombre del país a agregar: ").strip()
+        nombre = input("\nIngrese el nombre del país a agregar: ").strip().lower()
         if nombre == "":
-            print("\nEl nombre no puede estar vacío.")
+            print("El nombre no puede estar vacío.")
         else:
             break
 
@@ -131,7 +131,7 @@ def agregar_pais(paises):
     while True:
         continente = input("\nIngrese el continente del país: ").strip()
         if continente == "":
-            print("\nEl continente no puede estar vacío.")
+            print("El continente no puede estar vacío.")
         else:
             break
 
@@ -221,7 +221,7 @@ def buscar_pais(paises):
         print("\nNo hay países cargados para buscar.")
         return
 
-    busqueda = input("\nIngrese el nombre o parte del nombre del país: ").strip().lower()
+    busqueda = input("\nIngrese el nombre o parte del nombre del país: ").strip().lower() #eliminamos espacios y convertimos todo a minúsculas
 
     if busqueda == "":
         print("\nLa búsqueda no puede estar vacía.")
@@ -236,14 +236,12 @@ def buscar_pais(paises):
     mostrar_lista_paises(resultados)
 
 # Filtra los registros que pertenecen al continente indicado.
-# Se normaliza el texto utilizando lower()
-# para evitar problemas de mayúsculas y minúsculas.
 def filtrar_por_continente(paises):
     if len(paises) == 0:
         print("\nNo hay países cargados para filtrar.")
         return
 
-    continente = input("\nIngrese el continente a filtrar: ").strip().lower()
+    continente = input("\nIngrese el continente a filtrar: ").strip().lower()#quitamos espacios y pasamos todo a minúsculas
 
     if continente == "":
         print("\nEl continente no puede estar vacío.")
@@ -257,15 +255,14 @@ def filtrar_por_continente(paises):
 
     mostrar_lista_paises(resultados)
 
-# Se utiliza un rango mínimo y máximo para obtener
-# únicamente los países que cumplen la condición solicitada.
+
 def filtrar_por_poblacion(paises):
     if len(paises) == 0:
         print("\nNo hay países cargados para filtrar.")
         return
 
-    minimo = pedir_entero_positivo("\nIngrese la población mínima: ")
-    maximo = pedir_entero_positivo("\nIngrese la población máxima: ")
+    minimo = pedir_entero_positivo("\nIngrese la población mínima: ")# Se utiliza un rango mínimo y máximo para obtener
+    maximo = pedir_entero_positivo("Ingrese la población máxima: ")# únicamente los países que cumplen la condición solicitada.
 
     if minimo > maximo:
         print("\nEl valor mínimo no puede ser mayor que el máximo.")
@@ -285,7 +282,7 @@ def filtrar_por_superficie(paises):
         return
 
     minimo = pedir_entero_positivo("\nIngrese la superficie mínima: ")
-    maximo = pedir_entero_positivo("\nIngrese la superficie máxima: ")
+    maximo = pedir_entero_positivo("Ingrese la superficie máxima: ")
 
     if minimo > maximo:
         print("\nEl valor mínimo no puede ser mayor que el máximo.")
@@ -392,10 +389,10 @@ def menu():
             mostrar_estadisticas(paises)
         elif opcion == "7":
             print("\nSaliendo del programa. ¡Hasta luego!")
-            print()
             break
         else:
             print("\nOpción inválida. Por favor, intente nuevamente.")
 
 menu()
+
 
