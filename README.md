@@ -51,3 +51,7 @@ python main.py
 5. Ordenar países.
 6. Mostrar estadísticas.
 7. Salir.
+
+## Enlace al video demostrativo
+
+https://www.youtube.com/watch?v=wKXwOJIODXA
