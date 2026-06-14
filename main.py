@@ -1,3 +1,17 @@
+# Trabajo Práctico Integrador - Programación I
+# Sistema de Gestión de Países
+#
+# Estructura principal:
+# - Lista de diccionarios
+# - Archivo CSV como origen de datos
+# - Funciones modulares
+# - Búsquedas, filtros, ordenamientos y estadísticas
+#
+# Integrantes:
+# Mayra Palacios
+# Ammiel Vainstein
+
+
 import csv
 
 # Funciones auxiliares para obtener información de los países
@@ -17,6 +31,8 @@ def mostrar_pais(pais):
     print(f"Continente: {pais['continente']}")
     print("-" * 40)
 
+# Función auxiliar para mostrar resultados de forma uniforme.
+# Se reutiliza en búsquedas, filtros y ordenamientos.
 def mostrar_lista_paises(lista):
     if len(lista) == 0:
         print("\nNo se encontraron resultados.")
@@ -25,6 +41,9 @@ def mostrar_lista_paises(lista):
         for pais in lista:
             mostrar_pais(pais)
 
+# Función reutilizable para validar entradas numéricas.
+# Centraliza la validación y evita repetir código
+# en distintas partes del sistema.
 def pedir_entero_positivo(mensaje):
     while True:
         try:
@@ -37,6 +56,12 @@ def pedir_entero_positivo(mensaje):
             print("Debe ingresar un número entero válido.")
 
 #--MÓDULO DE DATOS--#
+
+# Punto de entrada de los datos del sistema.
+# Se lee el archivo CSV y se transforma cada registro
+# en un diccionario que luego será almacenado dentro
+# de una lista de países.
+
 def leer_csv():
     paises = []
     try:
@@ -54,6 +79,9 @@ def leer_csv():
                     continue
 
                 try:
+                    # Cada país se representa mediante un diccionario.
+                    # Esta estructura nos permite acceder fácilmente a los
+                    # atributos utilizando claves descriptivas.
                     pais = {
                         'nombre': linea[0].strip(),
                         'poblacion': int(linea[1]),
@@ -79,6 +107,9 @@ def leer_csv():
 
     return paises
 
+# Función encargada del alta de nuevos registros.
+# Se validan los datos ingresados para evitar
+# información incompleta o duplicada.
 def agregar_pais(paises):
     while True:
         nombre = input("\nIngrese el nombre del país a agregar: ").strip()
@@ -87,11 +118,13 @@ def agregar_pais(paises):
         else:
             break
 
-    for pais in paises:
+    # Recorremos toda la lista para verificar
+    # que el país no exista previamente.        
+    for pais in paises: 
         if pais['nombre'].lower() == nombre.lower():
             print("\nEl país ya existe en la lista.")
             return
-
+        
     poblacion = pedir_entero_positivo("\nIngrese la población del país: ")
     superficie = pedir_entero_positivo("\nIngrese la superficie del país (en km²): ")
 
@@ -112,6 +145,9 @@ def agregar_pais(paises):
     paises.append(nuevo_pais)
     print(f"\nPaís {nombre.title()} agregado exitosamente.")
 
+# Permite modificar información existente.
+# Se busca el país por nombre y se actualizan
+# únicamente los campos solicitados.
 def actualizar_pais(paises):
     nombre = input("\nIngrese el nombre del país a actualizar: ").strip()
 
@@ -131,6 +167,10 @@ def actualizar_pais(paises):
     print("\nEl país no se encontró en la lista.")
 
 #--MÓDULO DE ORDENAMIENTO--#
+
+# Se permite ordenar la información según distintos
+# criterios elegidos por el usuario.
+# Utilizamos sorted() para evitar modificar la lista original.
 def ordenar_paises(paises):
     if len(paises) == 0:
         print("\nNo hay países cargados para ordenar.")
@@ -164,11 +204,18 @@ def ordenar_paises(paises):
     else:
         print("\nOpción inválida.")
         return
-
+    
+    # sorted() genera una nueva lista ordenada.
+    # key define el criterio de comparación y
+    # reverse determina si el orden es ascendente o descendente.
     resultado = sorted(paises, key=clave, reverse=invertir)
     mostrar_lista_paises(resultado)
 
 #--MÓDULO DE BÚSQUEDA Y FILTRO--#
+
+# Implementa una búsqueda parcial.
+# Permite encontrar coincidencias aunque el usuario
+# ingrese solo una parte del nombre.
 def buscar_pais(paises):
     if len(paises) == 0:
         print("\nNo hay países cargados para buscar.")
@@ -188,6 +235,9 @@ def buscar_pais(paises):
 
     mostrar_lista_paises(resultados)
 
+# Filtra los registros que pertenecen al continente indicado.
+# Se normaliza el texto utilizando lower()
+# para evitar problemas de mayúsculas y minúsculas.
 def filtrar_por_continente(paises):
     if len(paises) == 0:
         print("\nNo hay países cargados para filtrar.")
@@ -207,6 +257,8 @@ def filtrar_por_continente(paises):
 
     mostrar_lista_paises(resultados)
 
+# Se utiliza un rango mínimo y máximo para obtener
+# únicamente los países que cumplen la condición solicitada.
 def filtrar_por_poblacion(paises):
     if len(paises) == 0:
         print("\nNo hay países cargados para filtrar.")
@@ -248,16 +300,25 @@ def filtrar_por_superficie(paises):
     mostrar_lista_paises(resultados)
 
 #--MÓDULO DE ESTADÍSTICAS--#
+
+# Calcula indicadores generales sobre la colección de países.
+# Se utilizan recorridos completos de la lista para obtener
+# máximos, mínimos, promedios y agrupaciones por continente.
 def mostrar_estadisticas(paises):
     if len(paises) == 0:
         print("\nNo hay países cargados para calcular estadísticas.")
         return
 
+    # Obtención del país con mayor y menor población.
+    # Las funciones auxiliares indican qué atributo comparar.
     pais_mayor_poblacion = max(paises, key=obtener_poblacion)
     pais_menor_poblacion = min(paises, key=obtener_poblacion)
 
     suma_poblacion = 0
     suma_superficie = 0
+    # Diccionario utilizado como contador.
+    # La clave es el continente y el valor representa
+    # la cantidad de países pertenecientes a él.
     cantidad_por_continente = {}
 
     for pais in paises:
@@ -285,6 +346,9 @@ def mostrar_estadisticas(paises):
         print(f"{continente}: {cantidad}")
 
 #--MENÚ PRINCIPAL--#
+
+# Punto principal de interacción con el usuario.
+# Mantiene la ejecución activa hasta que se seleccione la opción Salir.
 def menu():
     paises = leer_csv()
 
@@ -333,3 +397,4 @@ def menu():
             print("\nOpción inválida. Por favor, intente nuevamente.")
 
 menu()
+
